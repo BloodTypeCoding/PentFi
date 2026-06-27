@@ -1,13 +1,13 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
+import { ThemeProvider } from './contexts/ThemeContext'
 import App from './App'
 import './index.css'
 
-// Aplicar tema global
-document.documentElement.setAttribute('data-theme', 'winter')
-
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
-    <App />
+    <ThemeProvider>
+      <App />
+    </ThemeProvider>
   </React.StrictMode>
 )

@@ -1,11 +1,12 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
-import plus_icon from "../../assets/Icons/plus_icon.png";
-import income_icon from "../../assets/Icons/income_icon.svg";
-import expense_icon from "../../assets/Icons/expense_icon.svg";
-import category_icon from "../../assets/Icons/category_icon.svg";
-import edit_icon from "../../assets/Icons/edit_icon.svg";
+import plus_icon from "../../assets/Icons/homeIcons/plus_icon.png";
+import income_icon from "../../assets/Icons/homeIcons/income_icon.svg";
+import expense_icon from "../../assets/Icons/homeIcons/expense_icon.svg";
+import category_icon from "../../assets/Icons/homeIcons/category_icon.svg";
+import edit_icon from "../../assets/Icons/homeIcons/edit_icon.svg";
+import Diezmo_icon from "../../assets/Icons/homeIcons/Diezmo_icon.svg";
 
 export default function CrudDropdown() {
   return (
@@ -17,6 +18,16 @@ export default function CrudDropdown() {
         tabIndex="-1"
         className="dropdown-content menu bg-base-100 text-base-content rounded-box z-1 w-45 p-2 shadow-sm"
       >
+        <li>
+          <a>
+            <img
+              src={Diezmo_icon}
+              alt="Diezmo Icon"
+              className="w-5 h-5 ml-2"
+            ></img>
+            Registro Diezmo
+          </a>
+        </li>
         <li>
           <a>
             <img src={income_icon} alt="Income Icon" className="w-5 h-5 ml-2" />
@@ -45,11 +56,7 @@ export default function CrudDropdown() {
         </li>
         <li>
           <a>
-            <img
-              src={edit_icon}
-              alt="Edit Icon"
-              className="w-5 h-5 ml-2"
-            ></img>
+            <img src={edit_icon} alt="Edit Icon" className="w-5 h-5 ml-2"></img>
             Editar ingreso/salida
           </a>
         </li>
