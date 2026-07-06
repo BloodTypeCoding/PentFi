@@ -3,10 +3,10 @@ import logoNavbar from "../../Logos/LogoParaNavbar.png";
 import defaultUserImage from "../../Logos/defaultUserImage.svg";
 import { useState } from "react";
 import ThemeToggle from "../ThemeToggle";
-export default function Navbar({ name }) {
+export default function Navbar({ name, denominacion }) {
   return (
     <nav className="navbar flex items-center rounded-2xl bg-base-300 w-full justify-between">
-      <label htmlFor="home-drawer" className="btn btn-ghost">
+      <label htmlFor="app-drawer" className="btn btn-ghost">
         ☰
       </label>
       <div className="flex-1">
@@ -14,7 +14,10 @@ export default function Navbar({ name }) {
       </div>
       <div className="flex items-center gap-4">
         <ThemeToggle />
-        <p className="text-lg font-bold select-none">{name}</p>
+        <div className="text-right">
+          <p className="text-lg font-bold select-none leading-tight">{name}</p>
+          <span className="badge badge-primary badge-sm">{denominacion}</span>
+        </div>
         <div className="avatar">
           <div className="w-10 rounded-full border-2 border-primary p-1 select-none">
             <img src={defaultUserImage} alt="User" draggable={false} />

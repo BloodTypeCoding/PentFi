@@ -1,4 +1,4 @@
-import { getPayloadConfigFromPayload, getColorsCount, useChart } from "@/components/evilcharts/ui/chart";
+import { getPayloadConfigFromPayload, getColorsCount, useChart, toCSSKey } from "@/components/evilcharts/ui/chart";
 import * as RechartsPrimitive from "recharts";
 import { cn } from "@/lib/utils";
 import * as React from "react";
@@ -11,8 +11,8 @@ const roundnessMap = {
 };
 
 const variantMap = {
-  default: "bg-background",
-  "frosted-glass": "bg-background/70 backdrop-blur-sm",
+  default: "bg-base-100",
+  "frosted-glass": "bg-base-100/70 backdrop-blur-sm",
 };
 
 function ChartTooltipContent({
@@ -66,7 +66,7 @@ function ChartTooltipContent({
   return (
     <div
       className={cn(
-        "border-border/50 grid min-w-32 items-start gap-1.5 border px-2.5 py-1.5 text-xs shadow-xl",
+        "border-base-300/50 grid min-w-32 items-start gap-1.5 border px-2.5 py-1.5 text-xs shadow-xl",
         roundnessMap[roundness],
         variantMap[variant],
         className
@@ -93,7 +93,7 @@ function ChartTooltipContent({
               <div
                 key={index}
                 className={cn(
-                  "[&>svg]:text-muted-foreground flex w-full flex-wrap items-stretch gap-2 [&>svg]:h-2.5 [&>svg]:w-2.5",
+                    "[&>svg]:text-base-content/70 flex w-full flex-wrap items-stretch gap-2 [&>svg]:h-2.5 [&>svg]:w-2.5",
                   indicator === "dot" && "items-center",
                   selected != null && selected !== item.dataKey && "opacity-30"
                 )}>
@@ -123,7 +123,7 @@ function ChartTooltipContent({
                       )}>
                       <div className="grid gap-1.5">
                         {nestLabel ? tooltipLabel : null}
-                        <span className="text-muted-foreground">
+                        <span className="text-base-content/70">
                           {itemConfig?.label ?? item.name}
                         </span>
                       </div>
@@ -147,13 +147,13 @@ function ChartTooltipContent({
 
 function getIndicatorColorStyle(dataKey, colorsCount) {
   if (colorsCount <= 1) {
-    return { background: `var(--color-${dataKey}-0)` };
+    return { background: `var(--color-${toCSSKey(dataKey)}-0)` };
   }
 
   // Multiple colors: create linear gradient with evenly distributed stops
   const stops = Array.from({ length: colorsCount }, (_, index) => {
     const offset = (index / (colorsCount - 1)) * 100;
-    return `var(--color-${dataKey}-${index}) ${offset}%`;
+    return `var(--color-${toCSSKey(dataKey)}-${index}) ${offset}%`;
   }).join(", ");
 
   return { background: `linear-gradient(to right, ${stops})` };

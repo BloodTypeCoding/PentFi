@@ -7,13 +7,13 @@ import {
   Background,
 } from "@/components/evilcharts/charts/pie-chart";
 
-const data = [
+const defaultData = [
   { concept: "Ingresos", value: 850000 },
   { concept: "Salidas", value: 620000 },
   { concept: "Diezmo Neto", value: 5000000 },
 ];
 
-const chartConfig = {
+const defaultConfig = {
   Ingresos: {
     label: "Ingresos",
     colors: { light: ["#3b82f6"], dark: ["#60a5fa"] },
@@ -28,14 +28,14 @@ const chartConfig = {
   },
 };
 
-export default function ReportChart() {
+export default function ReportChart({ data = defaultData, config = defaultConfig }) {
   return (
     <EvilPieChart
       data={data}
       dataKey="value"
       backgroundVariant="dots"
       nameKey="concept"
-      config={chartConfig}
+      config={config}
     >
       <Legend isClickable />
       <Tooltip variant="frosted-glass" defaultIndex={4} />

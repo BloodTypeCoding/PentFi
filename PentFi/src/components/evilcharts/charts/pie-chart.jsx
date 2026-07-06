@@ -1,5 +1,5 @@
 "use client";;
-import { ChartContainer, getColorsCount, LoadingIndicator } from "@/components/evilcharts/ui/chart";
+import { ChartContainer, getColorsCount, LoadingIndicator, toCSSKey } from "@/components/evilcharts/ui/chart";
 import { ChartLegend, ChartLegendContent } from "@/components/evilcharts/ui/legend";
 import { ChartTooltip, ChartTooltipContent } from "@/components/evilcharts/ui/tooltip";
 import { ChartBackground } from "@/components/evilcharts/ui/background";
@@ -153,7 +153,7 @@ export function Pie({
 
   const preparedData = data.map((item) => ({
     ...item,
-    fill: `url(#${id}-colors-${item[nameKey]})`,
+    fill: `url(#${id}-colors-${toCSSKey(item[nameKey])})`,
   }));
 
   return (
@@ -186,8 +186,8 @@ export function Pie({
           return (
             <Sector
               {...props}
-              fill={`url(#${id}-colors-${sectorName})`}
-              filter={isGlowing ? `url(#${id}-glow-${sectorName})` : undefined}
+              fill={`url(#${id}-colors-${toCSSKey(sectorName)})`}
+              filter={isGlowing ? `url(#${id}-glow-${toCSSKey(sectorName)})` : undefined}
               stroke={paddingAngle < 0 ? "var(--background)" : "none"}
               strokeWidth={paddingAngle < 0 ? 5 : 0}
               opacity={isDimmed ? 0.3 : 1}
@@ -316,16 +316,16 @@ const RadialColorGradient = ({
 
         return (
           <linearGradient
-            key={`${id}-colors-${sectorKey}`}
-            id={`${id}-colors-${sectorKey}`}
+            key={`${id}-colors-${toCSSKey(sectorKey)}`}
+            id={`${id}-colors-${toCSSKey(sectorKey)}`}
             x1="0"
             y1="0"
             x2="1"
             y2="1">
             {colorsCount === 1 ? (
               <>
-                <stop offset="0%" stopColor={`var(--color-${sectorKey}-0)`} />
-                <stop offset="100%" stopColor={`var(--color-${sectorKey}-0)`} />
+                <stop offset="0%" stopColor={`var(--color-${toCSSKey(sectorKey)}-0)`} />
+                <stop offset="100%" stopColor={`var(--color-${toCSSKey(sectorKey)}-0)`} />
               </>
             ) : (
               Array.from({ length: colorsCount }, (_, index) => {
@@ -334,7 +334,7 @@ const RadialColorGradient = ({
                   <stop
                     key={offset}
                     offset={offset}
-                    stopColor={`var(--color-${sectorKey}-${index}, var(--color-${sectorKey}-0))`} />
+                    stopColor={`var(--color-${toCSSKey(sectorKey)}-${index}, var(--color-${toCSSKey(sectorKey)}-0))`} />
                 );
               })
             )}
@@ -354,8 +354,8 @@ const GlowFilter = ({
     <>
       {glowingSectors.map((sectorName) => (
         <filter
-          key={`${id}-glow-${sectorName}`}
-          id={`${id}-glow-${sectorName}`}
+          key={`${id}-glow-${toCSSKey(sectorName)}`}
+          id={`${id}-glow-${toCSSKey(sectorName)}`}
           x="-100%"
           y="-100%"
           width="300%"

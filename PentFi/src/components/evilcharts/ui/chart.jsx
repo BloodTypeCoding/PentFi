@@ -3,6 +3,11 @@ import * as RechartsPrimitive from "recharts";
 import { cn } from "@/lib/utils";
 import * as React from "react";
 
+// CSS-safe key: replaces spaces with hyphens so config keys like "Diezmo Neto" produce valid CSS vars
+export function toCSSKey(key) {
+  return key.replace(/\s+/g, "-");
+}
+
 // Format: { THEME_NAME: CSS_SELECTOR }
 const THEMES = {
   light: "",
@@ -60,7 +65,7 @@ function ChartContainer({
         data-chart={chartId}
         className={cn(
           "min-h-0 w-full flex-1",
-          "[&_.recharts-cartesian-axis-tick_text]:fill-muted-foreground [&_.recharts-cartesian-grid_line[stroke='#ccc']]:stroke-border/50 [&_.recharts-curve.recharts-tooltip-cursor]:stroke-border [&_.recharts-polar-grid_[stroke='#ccc']]:stroke-border [&_.recharts-radial-bar-background-sector]:fill-muted [&_.recharts-rectangle.recharts-tooltip-cursor]:fill-muted [&_.recharts-reference-line_[stroke='#ccc']]:stroke-border relative flex flex-col justify-center text-xs [&_.recharts-dot[stroke='#fff']]:stroke-transparent [&_.recharts-layer]:outline-hidden [&_.recharts-sector]:outline-hidden [&_.recharts-sector[stroke='#fff']]:stroke-transparent [&_.recharts-surface]:outline-hidden",
+          "[&_.recharts-cartesian-axis-tick_text]:fill-base-content/70 [&_.recharts-cartesian-grid_line[stroke='#ccc']]:stroke-base-300/50 [&_.recharts-curve.recharts-tooltip-cursor]:stroke-base-300 [&_.recharts-polar-grid_[stroke='#ccc']]:stroke-base-300 [&_.recharts-radial-bar-background-sector]:fill-base-300 [&_.recharts-rectangle.recharts-tooltip-cursor]:fill-base-300 [&_.recharts-reference-line_[stroke='#ccc']]:stroke-base-300 relative flex flex-col justify-center text-xs [&_.recharts-dot[stroke='#fff']]:stroke-transparent [&_.recharts-layer]:outline-hidden [&_.recharts-sector]:outline-hidden [&_.recharts-sector[stroke='#fff']]:stroke-transparent [&_.recharts-surface]:outline-hidden",
           !footer && "aspect-video",
           className
         )}
@@ -86,9 +91,9 @@ function LoadingIndicator({
     <div
       className="pointer-events-none absolute inset-0 z-20 flex items-center justify-center">
       <div
-        className="text-primary bg-background flex items-center justify-center gap-2 rounded-md border px-2 py-0.5 text-sm">
+        className="text-primary bg-base-100 flex items-center justify-center gap-2 rounded-md border px-2 py-0.5 text-sm">
         <div
-          className="border-border border-t-primary h-3 w-3 animate-spin rounded-full border" />
+          className="border-base-300 border-t-primary h-3 w-3 animate-spin rounded-full border" />
         <span>Loading</span>
       </div>
     </div>
@@ -145,7 +150,7 @@ const ChartStyle = ({
         // Distribute colors evenly across all required slots
         const distributedColors = distributeColors(colorsArray, maxCount);
 
-        return distributedColors.map((color, index) => `  --color-${key}-${index}: ${color};`);
+        return distributedColors.map((color, index) => `  --color-${toCSSKey(key)}-${index}: ${color};`);
       })
       .filter(Boolean)
       .join("\n");

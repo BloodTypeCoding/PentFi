@@ -1,4 +1,4 @@
-import { getPayloadConfigFromPayload, getColorsCount, useChart } from "@/components/evilcharts/ui/chart";
+import { getPayloadConfigFromPayload, getColorsCount, useChart, toCSSKey } from "@/components/evilcharts/ui/chart";
 import * as RechartsPrimitive from "recharts";
 import { cn } from "@/lib/utils";
 import * as React from "react";
@@ -52,7 +52,7 @@ function ChartLegendContent({
             <div
               key={key}
               className={cn(
-                "[&>svg]:text-muted-foreground flex items-center gap-1.5 transition-opacity [&>svg]:h-3 [&>svg]:w-3",
+                "[&>svg]:text-base-content/70 flex items-center gap-1.5 transition-opacity [&>svg]:h-3 [&>svg]:w-3",
                 !isSelected && "opacity-30",
                 isClickable && "cursor-pointer"
               )}
@@ -127,12 +127,12 @@ function LegendIndicator({
 /** Solid fill / gradient background for filled variants. */
 function getLegendFillStyle(dataKey, colorsCount) {
   if (colorsCount <= 1) {
-    return { backgroundColor: `var(--color-${dataKey}-0)` };
+    return { backgroundColor: `var(--color-${toCSSKey(dataKey)}-0)` };
   }
 
   const stops = Array.from({ length: colorsCount }, (_, i) => {
     const offset = (i / (colorsCount - 1)) * 100;
-    return `var(--color-${dataKey}-${i}) ${offset}%`;
+    return `var(--color-${toCSSKey(dataKey)}-${i}) ${offset}%`;
   }).join(", ");
 
   return { background: `linear-gradient(to right, ${stops})` };
@@ -155,14 +155,14 @@ function getLegendOutlineStyle(dataKey, colorsCount) {
 
   if (colorsCount <= 1) {
     return {
-      backgroundColor: `var(--color-${dataKey}-0)`,
+      backgroundColor: `var(--color-${toCSSKey(dataKey)}-0)`,
       ...maskStyle,
     };
   }
 
   const stops = Array.from({ length: colorsCount }, (_, i) => {
     const offset = (i / (colorsCount - 1)) * 100;
-    return `var(--color-${dataKey}-${i}) ${offset}%`;
+    return `var(--color-${toCSSKey(dataKey)}-${i}) ${offset}%`;
   }).join(", ");
 
   return {

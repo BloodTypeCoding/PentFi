@@ -1,65 +1,22 @@
 import React from "react";
-import { useState } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link } from "react-router-dom";
 import Navbar from "../components/Home/Navbar";
-import ThemeToggle from "../components/ThemeToggle";
-import AddButton from "../components/Home/CrudDropdown";
-import ReportChart from "../components/Home/ReportChart";
 import defaultUserImage from "../Logos/defaultUserImage.svg";
 import logoNavbar from "../Logos/LogoParaNavbar.png";
+import ThemeToggle from "../components/ThemeToggle";
 
-const reportData = [
-  { concept: "Ingresos", value: 850000 },
-  { concept: "Salidas", value: 620000 },
-  { concept: "Diezmo Neto", value: 5000000 },
-];
-
-const chartConfig = {
-  Ingresos: {
-    label: "Ingresos",
-    colors: { light: ["#3b82f6"], dark: ["#60a5fa"] },
-  },
-  Salidas: {
-    label: "Salidas",
-    colors: { light: ["#10b981"], dark: ["#34d399"] },
-  },
-  "Diezmo Neto": {
-    label: "Diezmo Neto",
-    colors: { light: ["#f59e0b"], dark: ["#fbbf24"] },
-  },
-};
-
-function formatCurrency(value) {
-  return new Intl.NumberFormat("es-CO", {
-    style: "currency",
-    currency: "COP",
-    minimumFractionDigits: 0,
-  }).format(value);
-}
-
-function Home() {
-  const location = useLocation();
-  const denominacion = location.state?.denominacion ?? "IPUC";
-
-  const [userName, setUserName] = useState(
-    "Iglesia Pentecostal Unida de Colombia - San José de la Montaña",
-  );
-
+export default function Membresia() {
   return (
     <div className="drawer min-h-screen">
       <input id="app-drawer" type="checkbox" className="drawer-toggle" />
       <div className="drawer-content pb-20 lg:pb-4">
-        {/* Desktop navbar */}
         <div className="hidden lg:block">
-          <Navbar name={userName} denominacion={denominacion} />
+          <Navbar name="Iglesia Pentecostal Unida de Colombia - San José de la Montaña" />
         </div>
 
-        {/* Mobile header */}
         <div className="flex lg:hidden items-center justify-between bg-base-300 rounded-2xl p-3 m-4 mb-2">
           <div className="flex items-center gap-3">
-            <label htmlFor="app-drawer" className="btn btn-ghost btn-sm">
-              ☰
-            </label>
+            <label htmlFor="app-drawer" className="btn btn-ghost btn-sm">☰</label>
             <img src={logoNavbar} alt="Logo" className="w-28 h-auto select-none" draggable={false} />
           </div>
           <div className="flex items-center gap-2">
@@ -72,40 +29,10 @@ function Home() {
           </div>
         </div>
 
-        {/* Mobile profile name */}
-        <p className="text-center text-sm font-semibold text-base-content/70 lg:hidden px-4 mb-2 truncate">
-          {userName}
-        </p>
-
-        <div className="px-4">
-          <div className="card bg-base-100 shadow-xl mt-2 lg:mt-6">
-            <div className="card-body">
-              <h2 className="card-title text-2xl font-bold mb-4">Reporte General</h2>
-              <div className="flex flex-col lg:flex-row items-center gap-8">
-                <div className="w-full lg:w-2/3">
-                  <ReportChart data={reportData} config={chartConfig} />
-                </div>
-                <div className="w-full lg:w-1/3 space-y-3">
-                  {reportData.map((item) => {
-                    const color = chartConfig[item.concept]?.colors?.light?.[0] ?? "#6b7280";
-                    return (
-                      <div
-                        key={item.concept}
-                        className="stat bg-base-200 rounded-box p-4 border-l-4"
-                        style={{ borderLeftColor: color }}
-                      >
-                        <div className="stat-title text-base font-medium">{item.concept}</div>
-                        <div className="stat-value text-2xl mt-1">{formatCurrency(item.value)}</div>
-                      </div>
-                    );
-                  })}
-                </div>
-              </div>
-            </div>
-          </div>
+        <div className="px-4 mt-4">
+          <h1 className="text-3xl font-bold">Membresía</h1>
+          <p className="text-base-content/70 mt-2">Sección de membresía — próximamente</p>
         </div>
-
-        <AddButton denominacion={denominacion} />
       </div>
 
       <div className="drawer-side">
@@ -119,9 +46,8 @@ function Home() {
         </ul>
       </div>
 
-      {/* Mobile dock */}
       <div className="dock flex lg:hidden">
-        <Link to="/home" className="dock-active flex flex-col items-center gap-0.5 py-1">
+        <Link to="/home" className="flex flex-col items-center gap-0.5 py-1">
           <svg className="size-[1.2em]" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
             <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
             <polyline points="9 22 9 12 15 12 15 22" />
@@ -152,5 +78,3 @@ function Home() {
     </div>
   );
 }
-
-export default Home;

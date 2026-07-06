@@ -11,7 +11,7 @@ function Login() {
   const handleLogin = (e) => {
     e.preventDefault();
     if (username === "example" && password === "example123") {
-      navigate("/home");
+      navigate("/home", { state: { denominacion: "IPUC" } });
     } else {
       setError(true);
     }
