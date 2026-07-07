@@ -8,9 +8,9 @@ import {
 } from "@/components/evilcharts/charts/pie-chart";
 
 const defaultData = [
-  { concept: "Ingresos", value: 850000 },
-  { concept: "Salidas", value: 620000 },
-  { concept: "Diezmo Neto", value: 5000000 },
+  { concept: "Ingresos", value: 0 },
+  { concept: "Salidas", value: 0 },
+  { concept: "Diezmo Neto", value: 0 },
 ];
 
 const defaultConfig = {

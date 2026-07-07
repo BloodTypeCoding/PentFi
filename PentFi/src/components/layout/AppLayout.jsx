@@ -50,7 +50,19 @@ export default function AppLayout({ children, activePage = "home" }) {
   const [nombreIglesia, setNombreIglesia] = useState(
     "Iglesia Pentecostal Unida de Colombia - San José de la Montaña",
   );
-  const [capitalInicial, setCapitalInicial] = useState(0);
+  const [capitalDisponible, setCapitalDisponible] = useState(0);
+
+  async function refreshUser() {
+    try {
+      const res = await fetch("/Backend/user_data/user.json");
+      const data = await res.json();
+      setDenominacion(data.denominacion);
+      setNombreIglesia(data.nombre_iglesia);
+      setCapitalDisponible(data.capital_disponible);
+    } catch {
+      // usa los valores actuales
+    }
+  }
 
   useEffect(() => {
     let cancelled = false;
@@ -58,17 +70,7 @@ export default function AppLayout({ children, activePage = "home" }) {
     async function loadUserData() {
       const start = Date.now();
 
-      try {
-        const res = await fetch("/Backend/user_data/user.json");
-        const data = await res.json();
-        if (!cancelled) {
-          setDenominacion(data.denominacion);
-          setNombreIglesia(data.nombre_iglesia);
-          setCapitalInicial(data.capital_inicial);
-        }
-      } catch {
-        // usa defaults si falla
-      }
+      await refreshUser();
 
       const elapsed = Date.now() - start;
       const remaining = 4000 - elapsed;
@@ -85,7 +87,7 @@ export default function AppLayout({ children, activePage = "home" }) {
   if (isLoading) return <LoadingScreen />;
 
   return (
-    <UserContext value={{ denominacion, nombreIglesia, capitalInicial }}>
+    <UserContext value={{ denominacion, nombreIglesia, capitalDisponible, refreshUser }}>
       <div className="drawer min-h-screen">
         <input id="app-drawer" type="checkbox" className="drawer-toggle" />
         <div className="drawer-content pb-20 lg:pb-4">

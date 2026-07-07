@@ -33,7 +33,7 @@ function formatCurrency(value) {
 }
 
 function HomeContent() {
-  const { capitalInicial } = useUser();
+  const { capitalDisponible } = useUser();
   const [selectedMonth, setSelectedMonth] = useState(months[new Date().getMonth()]);
   const { reportData, loading } = useReporteMensual(selectedMonth);
 
@@ -44,7 +44,7 @@ function HomeContent() {
           <div className="flex items-center justify-between">
             <div>
               <p className="text-sm font-medium text-base-content/70 uppercase tracking-wider">Capital Disponible</p>
-              <p className="text-3xl font-bold text-success mt-1">{formatCurrency(capitalInicial)}</p>
+              <p className="text-3xl font-bold text-success mt-1">{formatCurrency(capitalDisponible)}</p>
             </div>
             <div className="size-12 rounded-full bg-success/10 flex items-center justify-center">
               <svg className="size-6 text-success" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">

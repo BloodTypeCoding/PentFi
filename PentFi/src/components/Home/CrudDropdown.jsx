@@ -1,5 +1,6 @@
-import React, { useRef, useState } from "react";
+import { useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useUser } from "../../contexts/UserContext";
 import plus_icon from "../../assets/Icons/homeIcons/plus_icon.png";
 import income_icon from "../../assets/Icons/homeIcons/income_icon.svg";
 import expense_icon from "../../assets/Icons/homeIcons/expense_icon.svg";
@@ -8,6 +9,7 @@ import edit_icon from "../../assets/Icons/homeIcons/edit_icon.svg";
 import Diezmo_icon from "../../assets/Icons/homeIcons/Diezmo_icon.svg";
 
 export default function CrudDropdown({ denominacion = "IPUC" }) {
+  const { refreshUser } = useUser();
   const diezmoRef = useRef(null);
   const ingresoRef = useRef(null);
   const salidaRef = useRef(null);
@@ -32,9 +34,30 @@ export default function CrudDropdown({ denominacion = "IPUC" }) {
     diezmoRef.current?.close();
   }
 
-  function handleDiezmoSubmit(e) {
+  async function handleDiezmoSubmit(e) {
     e.preventDefault();
-    console.log({ tipo: "diezmo", denominacion, fecha, monto });
+    const montoTotal = Number(monto);
+    const montoNeto = montoTotal * (0.21 + 0.028);
+
+    await Promise.all([
+      fetch("/Backend/Diezmo_Neto/diezmo_neto.json", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ fecha, monto: montoNeto }),
+      }),
+      fetch("/Backend/user_data/user.json")
+        .then((r) => r.json())
+        .then((user) => {
+          user.capital_disponible += montoNeto;
+          return fetch("/Backend/user_data/user.json", {
+            method: "PUT",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(user),
+          });
+        }),
+    ]);
+
+    refreshUser();
     closeDiezmoModal();
   }
 
