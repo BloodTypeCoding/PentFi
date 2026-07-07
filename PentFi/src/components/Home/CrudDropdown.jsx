@@ -71,9 +71,13 @@ export default function CrudDropdown({ denominacion = "IPUC" }) {
     ingresoRef.current?.close();
   }
 
-  function handleIngresoSubmit(e) {
+  async function handleIngresoSubmit(e) {
     e.preventDefault();
-    console.log({ tipo: "ingreso", denominacion, categoria, cantidad });
+    await fetch("/Backend/Ingresos/ingresos.json", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ fecha, categoria, monto: Number(cantidad) }),
+    });
     closeIngresoModal();
   }
 
@@ -88,9 +92,17 @@ export default function CrudDropdown({ denominacion = "IPUC" }) {
     salidaRef.current?.close();
   }
 
-  function handleSalidaSubmit(e) {
+  async function handleSalidaSubmit(e) {
     e.preventDefault();
-    console.log({ tipo: "salida", denominacion, categoria: salidaCategoria, cantidad: salidaCantidad });
+    await fetch("/Backend/Salidas/salidas.json", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        fecha: salidaFecha,
+        categoria: salidaCategoria,
+        monto: Number(salidaCantidad),
+      }),
+    });
     closeSalidaModal();
   }
 
@@ -104,9 +116,13 @@ export default function CrudDropdown({ denominacion = "IPUC" }) {
     categoriaRef.current?.close();
   }
 
-  function handleCategoriaSubmit(e) {
+  async function handleCategoriaSubmit(e) {
     e.preventDefault();
-    console.log({ tipo: "categoria", denominacion, tipo: categoriaTipo, nombre: categoriaNombre });
+    await fetch("/Backend/Categorias/categorias.json", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ tipo: categoriaTipo, nombre: categoriaNombre }),
+    });
     closeCategoriaModal();
   }
 

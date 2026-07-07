@@ -15,21 +15,42 @@ Clone the repository:
 ```bash
 git clone https://github.com/BloodTypeCoding/PentFi.git
 ```
-Open the folder where the project is:
+
+Open the project folder:
 
 ```bash
-cd .\PentFi\
+cd PentFi/PentFi
 ```
+
 Install dependencies:
 
 ```bash
 npm install
 ```
-Run project
+
+### Development
 
 ```bash
 npm run dev
 ```
+
+Open `http://localhost:5173` in your browser.
+
+### Production (church deployment)
+
+Build once (or after each update):
+
+```bash
+npm run build
+```
+
+Start the server:
+
+```bash
+npm start
+```
+
+Open `http://localhost:3000` in your browser. The server will keep running until you close the terminal.
 
 ## Autor
 
