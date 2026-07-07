@@ -1,17 +1,12 @@
-import React from "react";
 import { useState } from "react";
-import { Link, useLocation } from "react-router-dom";
-import Navbar from "../components/Home/Navbar";
-import ThemeToggle from "../components/ThemeToggle";
-import AddButton from "../components/Home/CrudDropdown";
+import AppLayout from "../components/layout/AppLayout";
+import { useUser } from "../contexts/UserContext";
+import { useReporteMensual } from "../hooks/useReporteMensual";
 import ReportChart from "../components/Home/ReportChart";
-import defaultUserImage from "../Logos/defaultUserImage.svg";
-import logoNavbar from "../Logos/LogoParaNavbar.png";
 
-const reportData = [
-  { concept: "Ingresos", value: 850000 },
-  { concept: "Salidas", value: 620000 },
-  { concept: "Diezmo Neto", value: 5000000 },
+const months = [
+  "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio",
+  "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre",
 ];
 
 const chartConfig = {
@@ -37,119 +32,78 @@ function formatCurrency(value) {
   }).format(value);
 }
 
-function Home() {
-  const location = useLocation();
-  const denominacion = location.state?.denominacion ?? "IPUC";
-
-  const [userName, setUserName] = useState(
-    "Iglesia Pentecostal Unida de Colombia - San José de la Montaña",
-  );
+function HomeContent() {
+  const { capitalInicial } = useUser();
+  const [selectedMonth, setSelectedMonth] = useState(months[new Date().getMonth()]);
+  const { reportData, loading } = useReporteMensual(selectedMonth);
 
   return (
-    <div className="drawer min-h-screen">
-      <input id="app-drawer" type="checkbox" className="drawer-toggle" />
-      <div className="drawer-content pb-20 lg:pb-4">
-        {/* Desktop navbar */}
-        <div className="hidden lg:block">
-          <Navbar name={userName} denominacion={denominacion} />
-        </div>
-
-        {/* Mobile header */}
-        <div className="flex lg:hidden items-center justify-between bg-base-300 rounded-2xl p-3 m-4 mb-2">
-          <div className="flex items-center gap-3">
-            <label htmlFor="app-drawer" className="btn btn-ghost btn-sm">
-              ☰
-            </label>
-            <img src={logoNavbar} alt="Logo" className="w-28 h-auto select-none" draggable={false} />
-          </div>
-          <div className="flex items-center gap-2">
-            <ThemeToggle />
-            <div className="avatar">
-              <div className="w-8 rounded-full border-2 border-primary">
-                <img src={defaultUserImage} alt="User" draggable={false} />
-              </div>
+    <div className="px-4">
+      <div className="card bg-base-100 shadow-xl mt-2 lg:mt-6">
+        <div className="card-body border-b border-base-200">
+          <div className="flex items-center justify-between">
+            <div>
+              <p className="text-sm font-medium text-base-content/70 uppercase tracking-wider">Capital Disponible</p>
+              <p className="text-3xl font-bold text-success mt-1">{formatCurrency(capitalInicial)}</p>
+            </div>
+            <div className="size-12 rounded-full bg-success/10 flex items-center justify-center">
+              <svg className="size-6 text-success" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" />
+              </svg>
             </div>
           </div>
         </div>
 
-        {/* Mobile profile name */}
-        <p className="text-center text-sm font-semibold text-base-content/70 lg:hidden px-4 mb-2 truncate">
-          {userName}
-        </p>
-
-        <div className="px-4">
-          <div className="card bg-base-100 shadow-xl mt-2 lg:mt-6">
-            <div className="card-body">
-              <h2 className="card-title text-2xl font-bold mb-4">Reporte General</h2>
-              <div className="flex flex-col lg:flex-row items-center gap-8">
-                <div className="w-full lg:w-2/3">
-                  <ReportChart data={reportData} config={chartConfig} />
+        <div className="card-body">
+          <div className="flex items-center justify-between mb-4">
+            <h2 className="card-title text-2xl font-bold">Reporte General</h2>
+            <select
+              className="select select-bordered select-sm w-40"
+              value={selectedMonth}
+              onChange={(e) => setSelectedMonth(e.target.value)}
+            >
+              {months.map((m) => (
+                <option key={m} value={m}>{m}</option>
+              ))}
+            </select>
+          </div>
+          <div className="flex flex-col lg:flex-row items-center gap-8">
+            <div className="w-full lg:w-2/3">
+              {loading ? (
+                <div className="flex items-center justify-center h-64">
+                  <span className="loading loading-spinner loading-lg text-primary" />
                 </div>
-                <div className="w-full lg:w-1/3 space-y-3">
-                  {reportData.map((item) => {
-                    const color = chartConfig[item.concept]?.colors?.light?.[0] ?? "#6b7280";
-                    return (
-                      <div
-                        key={item.concept}
-                        className="stat bg-base-200 rounded-box p-4 border-l-4"
-                        style={{ borderLeftColor: color }}
-                      >
-                        <div className="stat-title text-base font-medium">{item.concept}</div>
-                        <div className="stat-value text-2xl mt-1">{formatCurrency(item.value)}</div>
-                      </div>
-                    );
-                  })}
-                </div>
-              </div>
+              ) : (
+                <ReportChart data={reportData} config={chartConfig} />
+              )}
+            </div>
+            <div className="w-full lg:w-1/3 space-y-3">
+              {reportData.map((item) => {
+                const color = chartConfig[item.concept]?.colors?.light?.[0] ?? "#6b7280";
+                return (
+                  <div
+                    key={item.concept}
+                    className="stat bg-base-200 rounded-box p-4 border-l-4"
+                    style={{ borderLeftColor: color }}
+                  >
+                    <div className="stat-title text-base font-medium">{item.concept}</div>
+                    <div className="stat-value text-2xl mt-1">{formatCurrency(item.value)}</div>
+                  </div>
+                );
+              })}
             </div>
           </div>
         </div>
-
-        <AddButton denominacion={denominacion} />
-      </div>
-
-      <div className="drawer-side">
-        <label htmlFor="app-drawer" className="drawer-overlay"></label>
-        <ul className="menu p-4 w-80 min-h-full bg-base-200 text-base-content">
-          <li><Link to="/home">Home</Link></li>
-          <li><Link to="/ingresos">Ingresos</Link></li>
-          <li><Link to="/salidas">Salidas</Link></li>
-          <li><Link to="/membresia">Membresía</Link></li>
-          <li><Link to="/libro-diario">Libro Diario</Link></li>
-        </ul>
-      </div>
-
-      {/* Mobile dock */}
-      <div className="dock flex lg:hidden">
-        <Link to="/home" className="dock-active flex flex-col items-center gap-0.5 py-1">
-          <svg className="size-[1.2em]" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-            <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
-            <polyline points="9 22 9 12 15 12 15 22" />
-          </svg>
-          <span className="dock-label">Home</span>
-        </Link>
-        <Link to="/ingresos" className="flex flex-col items-center gap-0.5 py-1">
-          <svg className="size-[1.2em]" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-            <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" />
-          </svg>
-          <span className="dock-label">Ingresos</span>
-        </Link>
-        <Link to="/salidas" className="flex flex-col items-center gap-0.5 py-1">
-          <svg className="size-[1.2em]" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-            <path d="M17 14v-4M7 14v-4M3 10h18M5 10V6a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v4M5 14v4a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-4" />
-          </svg>
-          <span className="dock-label">Salidas</span>
-        </Link>
-        <label htmlFor="app-drawer" className="flex flex-col items-center gap-0.5 cursor-pointer py-1">
-          <svg className="size-[1.2em]" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-            <circle cx="12" cy="12" r="1" />
-            <circle cx="19" cy="12" r="1" />
-            <circle cx="5" cy="12" r="1" />
-          </svg>
-          <span className="dock-label">Más</span>
-        </label>
       </div>
     </div>
+  );
+}
+
+function Home() {
+  return (
+    <AppLayout activePage="home">
+      <HomeContent />
+    </AppLayout>
   );
 }
 

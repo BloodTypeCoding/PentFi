@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import React from "react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import logo from "../Logos/IntentoDeLogo.png";
 
 function Login() {
@@ -8,10 +8,20 @@ function Login() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState(false);
+  const [userData, setUserData] = useState(null);
+
+  useEffect(() => {
+    fetch("/Backend/user_data/user.json")
+      .then((res) => res.json())
+      .then((data) => setUserData(data))
+      .catch(() => setError(true));
+  }, []);
+
   const handleLogin = (e) => {
     e.preventDefault();
-    if (username === "example" && password === "example123") {
-      navigate("/home", { state: { denominacion: "IPUC" } });
+    if (!userData) return;
+    if (username === userData.usuario && password === userData.contrasena) {
+      navigate("/home");
     } else {
       setError(true);
     }

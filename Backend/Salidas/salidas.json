@@ -1,0 +1,32 @@
+[
+  {
+    "fecha": "2026-01-10",
+    "categoria": "Servicios Públicos",
+    "monto": 120000
+  },
+  {
+    "fecha": "2026-01-20",
+    "categoria": "Mantenimiento",
+    "monto": 85000
+  },
+  {
+    "fecha": "2026-02-05",
+    "categoria": "Salarios",
+    "monto": 450000
+  },
+  {
+    "fecha": "2026-02-15",
+    "categoria": "Material de Oficina",
+    "monto": 32000
+  },
+  {
+    "fecha": "2026-03-08",
+    "categoria": "Transporte",
+    "monto": 60000
+  },
+  {
+    "fecha": "2026-03-22",
+    "categoria": "Eventos",
+    "monto": 200000
+  }
+]
